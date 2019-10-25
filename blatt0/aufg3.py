@@ -32,7 +32,6 @@ def jacobi(A, b, num_it = 1000):
     
     errors = list()
     for i in range(num_it):
-        x_old = x
         x = la.solve(D, -(L+U) @ x + b, lower=True)
         errors.append(la.norm(A@x-b))
         if errors[-1] < 1e-8:
