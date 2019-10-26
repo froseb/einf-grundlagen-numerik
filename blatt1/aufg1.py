@@ -32,3 +32,17 @@ def plot_chebyshev(n):
     plt.show()
 
 plot_chebyshev(6)
+
+def recursion_3term_iterative(F0, F1, beta, gamma, n, xs):
+    vals_im1 = np.array([F0(x) for x in xs])
+    vals_i = np.array([F1(x) for x in xs])
+
+    for i in range(2, n+1):
+        tmp = vals_i
+        vals_i = beta*vals_i + gamma*vals_im1
+        vals_im1 = tmp
+
+    return vals_i
+
+def pn_tschebyscheff_iterative(alphas, xs):
+    pass
