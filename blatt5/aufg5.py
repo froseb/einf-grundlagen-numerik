@@ -9,7 +9,7 @@ def solve_system_cg(A, b, x_0, kmax=105, eps=1e-8, return_errors=False):
     x = x_0
     r = b - A @ x
     d = r
-    Ad = A @ d
+    Ad = 0
     beta = 0
 
     for _ in range(kmax):
