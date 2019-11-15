@@ -13,11 +13,9 @@ def solve_system_cg(A, b, x_0, kmax=105, eps=1e-8, return_errors=False):
     beta = 0
 
     for _ in range(kmax):
-        Ad_old = Ad
         Ad = A @ d
-        Ar = Ad - beta * Ad_old
 
-        err_squared = abs(r @ Ar)
+        err_squared = abs(r @ r)
 
         if return_errors:
             errs.append(err_squared ** 0.5)
