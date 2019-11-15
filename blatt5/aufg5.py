@@ -13,7 +13,9 @@ def solve_system_cg(A, b, x_0, kmax=105, eps=1e-8, return_errors=False):
     beta = 0
 
     for _ in range(kmax):
-        Ar = A @ r
+        Ad_old = Ad
+        Ad = A @ d
+        Ar = Ad - beta * Ad_old
 
         err_squared = abs(r @ Ar)
 
@@ -21,8 +23,6 @@ def solve_system_cg(A, b, x_0, kmax=105, eps=1e-8, return_errors=False):
             errs.append(err_squared ** 0.5)
         if err_squared <= eps*eps:
             break
-
-        Ad = Ar + beta * Ad
 
         # Variable Updates
         rr_old = r @ r
