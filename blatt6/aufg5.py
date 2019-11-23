@@ -25,14 +25,14 @@ def rank_1_update(A, lam, ev):
     return A - lam * ev[np.newaxis].T @ ev[np.newaxis]
 
 def compute_first_eigenpairs(A, v_0, m, max_it):
-    m = max(m, len(A))
+    m = min(m, len(A))
 
     eigenvectors = []
     eigenvalues = []
 
     for _ in range(m):
         ev, lmb = power_iteration(A, v_0, max_it)
-        eigenvectors.append(v)
+        eigenvectors.append(ev)
         eigenvalues.append(lmb)
         A = rank_1_update(A, lmb, ev)
 
