@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def power_iteration(A, v_0 = None, kmax=1e6, eps=1e-8):
-    if v_0 == None:
+def power_iteration(A, v_0 = None, kmax=100000, eps=1e-8):
+    if v_0 is None:
         try:
-            v_0 = np.zeros(np.shape(A)[1])
+            v_0 = np.ones(np.shape(A)[1])
         except:
             raise Exception("Wrong input matrix")
 
@@ -21,12 +21,8 @@ def power_iteration(A, v_0 = None, kmax=1e6, eps=1e-8):
 
     return v, v @ Av / np.linalg.norm(v)
 
-A = np.loadtxt("matrix_power.txt")
-v, lmb = power_iteration(A)
-print(v, lmb)
-
 def rank_1_update(A, lam, ev):
-    return A - lam * v @ v
+    return A - lam * ev[np.newaxis].T @ ev[np.newaxis]
 
 def compute_first_eigenpairs(A, v_0, m, max_it):
     m = max(m, len(A))
@@ -34,9 +30,17 @@ def compute_first_eigenpairs(A, v_0, m, max_it):
     eigenvectors = []
     eigenvalues = []
 
-    for i in range(m):
+    for _ in range(m):
         ev, lmb = power_iteration(A, v_0, max_it)
         eigenvectors.append(v)
         eigenvalues.append(lmb)
         A = rank_1_update(A, lmb, ev)
 
+    return eigenvectors, eigenvalues
+
+A = np.loadtxt("matrix_power.txt", delimiter=',')
+v, lmb = power_iteration(A)
+print(lmb)
+
+v, lmb = compute_first_eigenpairs(A, np.ones(np.shape(A)[1]), 100, 10000)
+print(lmb)
