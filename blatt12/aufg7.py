@@ -39,7 +39,7 @@ def compute_qrdecomp_householder(A):
     """
     n = np.shape(A)[1]
     Q = np.eye(n)
-    R = A
+    R = np.copy(A)
 
     # iterate through all columns
     for i in range(n):
@@ -59,7 +59,7 @@ def compute_qrdecomp_householder_optimized(A):
     """
     n = np.shape(A)[1]
     Q = np.eye(n)
-    R = A
+    R = np.copy(A)
 
     eps = np.linalg.norm(A) * 1e-20
 
@@ -76,10 +76,11 @@ def compute_qrdecomp_householder_optimized(A):
             # Do nothing if e-vk is close to 0
             continue
         # Compute the reflection direction of the householder transformation
-        reflection_direction = (e - vk) / np.linalg.norm(e - vk)
+        reflection_direction = (e - vk) / norm
+
         # Update Q and R without explicitely using the householder matrix -> less computation
-        Q[i:, i:] = ((Q.T)[i:, i:] - reflection_direction[np.newaxis].T @ (reflection_direction[np.newaxis] @ (Q.T)[i:, i:])).T
-        R[i:, i:] = R[i:, i:] - reflection_direction[np.newaxis].T @ (reflection_direction[np.newaxis] @ R[i:, i:])
+        Q[:, i:] = ((Q.T)[i:, :] - 2 * reflection_direction[np.newaxis].T @ (reflection_direction[np.newaxis] @ (Q.T)[i:, :])).T
+        R[i:, i:] = R[i:, i:] - 2 * reflection_direction[np.newaxis].T @ (reflection_direction[np.newaxis] @ R[i:, i:])
 
     return Q, R
 
@@ -103,7 +104,7 @@ def compute_qrdecomp_givens(A):
     """
     n = np.shape(A)[1]
     Q = np.eye(n)
-    R = A
+    R = np.copy(A)
     for i in range(n):
         for j in range(i+1, n):
             G = compute_givens_rotation(A, i, j)
