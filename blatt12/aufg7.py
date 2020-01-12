@@ -33,7 +33,7 @@ def compute_householder_matrix_full(v, m):
 
 
 def compute_qrdecomp_householder(A):
-    """Computes the QR decomposition of a matrix A^(n x n) in R (i. e. matrices Q and R,
+    """Computes the QR decomposition of a matrix A in R^(n x n) (i. e. matrices Q and R,
     where Q.T @ Q == Q @ Q.T == np.eye(n) and R is a right upper triangular matrix with A == Q @ R)
     using Householder matrices
     """
@@ -53,7 +53,7 @@ def compute_qrdecomp_householder(A):
 def compute_qrdecomp_householder_optimized(A):
     """Optimized version of compute_qrdecomp_householder that does not explicitly compute the householder matrix
 
-    Computes the QR decomposition of a matrix A^(n x n) in R (i. e. matrices Q and R,
+    Computes the QR decomposition of a matrix A in R^(n x n) (i. e. matrices Q and R,
     where Q.T @ Q == Q @ Q.T == np.eye(n) and R is a right upper triangular matrix with A == Q @ R)
     using Householder matrices
     """
@@ -105,9 +105,9 @@ def compute_qrdecomp_givens(A):
     n = np.shape(A)[1]
     Q = np.eye(n)
     R = np.copy(A)
-    for i in range(n):
-        for j in range(i+1, n):
-            G = compute_givens_rotation(A, i, j)
+    for j in range(n):
+        for i in range(j+1, n):
+            G = compute_givens_rotation(R, i, j)
             Q = G.dot(Q.T).T
             R = G.dot(R)
     return Q, R
